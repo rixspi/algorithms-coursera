@@ -115,37 +115,4 @@ class Percolation(private val n: Int) {
             return true
         }
     }
-
-    fun printGridIds() {
-        grid.forEach {
-            it.forEach {
-                print(it.id)
-                print("  ")
-            }
-            println()
-        }
-    }
-
-
-    fun printGrid() {
-        StdDraw.setPenRadius(0.01);
-
-        (0 until n).forEach { row ->
-            (0 until n).forEach { column ->
-                if (grid[row][column].open) {
-                    StdDraw.setPenColor(StdDraw.WHITE);
-                } else {
-                    StdDraw.setPenColor(StdDraw.BLACK);
-                }
-
-                val xPos = column.toDouble() / n
-                val yPos = row.toDouble() / n
-                //println("$xPos;$yPos")
-                val rectSize = 1.0 / 2 / n
-
-
-                StdDraw.filledSquare(xPos + 0.1, 0.90 - yPos, rectSize)
-            }
-        }
-    }
 }

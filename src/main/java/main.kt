@@ -24,10 +24,6 @@ class PercolationState(private val size: Int) {
     private val percolation by mutableStateOf(Percolation(size))
     var grid by mutableStateOf(percolation.grid)
 
-    fun start() {
-
-    }
-
     fun percolates() = percolation.percolates()
 
     fun update() {
@@ -42,11 +38,10 @@ class PercolationState(private val size: Int) {
 }
 
 fun main() = application {
-    //percolation()
 
     val windowSize = 600.dp
     val gridSize = 1000
-    val boxSize = (windowSize-40.dp).div(gridSize.toDouble().dp)
+    val boxSize = (windowSize - 40.dp).div(gridSize.toDouble().dp)
     Window(
         onCloseRequest = ::exitApplication,
         title = "Compose for Desktop",
@@ -56,38 +51,20 @@ fun main() = application {
 
         Canvas(modifier = Modifier.fillMaxSize()) {
             percolation.grid.forEachIndexed { row, it ->
-                    it.forEachIndexed { column, site ->
-                        if (site.open) {
-                            drawRect(Color.White, topLeft = Offset(column*boxSize, row*boxSize), size = Size(boxSize, boxSize))
-                        }else{
-                            drawRect(Color.Black, topLeft = Offset(column*boxSize, row*boxSize), size = Size(boxSize, boxSize))
-                        }
+                it.forEachIndexed { column, site ->
+                    val offset = Offset(column * boxSize, row * boxSize)
+                    val size = Size(boxSize, boxSize)
+                    if (site.open) {
+                        drawRect(Color.White, topLeft = offset, size = size)
+                    } else {
+                        drawRect(Color.Black, topLeft = offset, size = size)
                     }
+                }
             }
         }
-
-//        Column(Modifier.fillMaxSize()) {
-//            percolation.grid.forEach {
-//                Row {
-//                    it.forEach {
-//                        if (it.open) {
-//                            Box(
-//                                modifier = Modifier.size(boxSize.dp).clip(RectangleShape).background(Color.White)
-//                            )
-//                        }else{
-//                            Box(
-//                                modifier = Modifier.size(boxSize.dp).clip(RectangleShape).background(Color.Black)
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//
-//        }
         LaunchedEffect(Unit) {
 
             while (true) {
-                //delay(500)
                 withFrameMillis {
                     if (percolation.percolates().not()) {
                         percolation.update()
@@ -96,34 +73,4 @@ fun main() = application {
             }
         }
     }
-}
-
-fun percolation() {
-    println("Hello World!")
-
-    val size = 50
-    val tests = 1
-    val results = IntArray(tests)
-
-    for (i in 0 until tests) {
-        val percolation = Percolation(size)
-        var percolates = false
-        var loops = 0
-        while (percolates.not()) {
-            val row = Random.nextInt(0 until size)
-            val column = Random.nextInt(0 until size)
-
-            if (percolation.isFull(row, column)) {
-                percolation.open(row, column)
-                percolation.printGrid()
-                //Thread.sleep(500)
-                percolates = percolation.percolates()
-                loops++
-            }
-        }
-        results[i] = loops
-    }
-
-    println(results.average().div(size * size))
-
 }
